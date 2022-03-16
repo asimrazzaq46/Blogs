@@ -1,0 +1,6 @@
+notes.txt
+server/node_modules
+server/config/config.env
+client/config
+client/.next
+client/node_modules
