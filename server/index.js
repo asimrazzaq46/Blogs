@@ -14,9 +14,9 @@ const app = express();
 
 // Setting Up config files
 dotenv.config({ path: "./config/config.env" });
-app.use(cookieParser());
 app.use(express.json());
 app.use(bodyparser.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(morgan("dev"));
 if (process.env.NODE_ENV === "development") {
   app.use(cors({ origin: `${process.env.CLIENT_URL}` }));

@@ -14,14 +14,17 @@ const { runValidation } = require("../../validators");
 const { tagsCreateValidator } = require("../../validators/tagsValidator");
 
 // Authentication middleware
-const signinRequire = require("../../middlewares/signinRequire");
-const isAdmin = require("../../middlewares/isAdmin");
+const { requireSignin } = require("../../middlewares/signinRequire");
+const {isAdmin} = require("../../middlewares/isAdmin");
+
+// const signinRequire = require("../../middlewares/signinRequire");
+// const isAdmin = require("../../middlewares/isAdmin");
 
 router
   .route("/tag")
-  .post(tagsCreateValidator, runValidation, signinRequire, isAdmin, createTag);
+  .post(tagsCreateValidator, runValidation, requireSignin, isAdmin, createTag);
 router.route("/tags").get(allTags);
 router.route("/tag/:slug").get(oneTag);
-router.route("/tag/:slug").delete(signinRequire, isAdmin, deleteTag);
+router.route("/tag/:slug").delete(requireSignin, isAdmin, deleteTag);
 
 module.exports = router;

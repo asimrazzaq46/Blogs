@@ -5,9 +5,11 @@ const router = express.Router();
 const { profile } = require("../controllers/userController");
 
 // Authentication middleware
-const signinRequire = require("../middlewares/signinRequire");
-const isAdmin = require("../middlewares/isAdmin");
+const { requireSignin } = require("../middlewares/signinRequire");
+const { authMiddleware } = require("../middlewares/isAdmin");
 
-router.route("/profile").get(signinRequire, profile);
+// const signinRequire = require("../middlewares/signinRequire");
+
+router.route("/profile").get(requireSignin, authMiddleware, profile);
 
 module.exports = router;

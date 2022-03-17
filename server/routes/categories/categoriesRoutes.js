@@ -17,21 +17,23 @@ const {
 } = require("../../validators/categoryValidator");
 
 // Authentication middleware
-const signinRequire = require("../../middlewares/signinRequire");
-const isAdmin = require("../../middlewares/isAdmin");
+const { requireSignin } = require("../../middlewares/signinRequire");
+const { isAdmin } = require("../../middlewares/isAdmin");
+
+// const isAdmin = require("../../middlewares/isAdmin");
 
 router
   .route("/category")
   .post(
     categoryCreateValidator,
     runValidation,
-    signinRequire,
+    requireSignin,
     isAdmin,
     createCategory
   );
 
 router.route("/categories").get(allCategories);
 router.route("/category/:slug").get(singleCategory);
-router.route("/category/:slug").delete(signinRequire, isAdmin, deleteCategory);
+router.route("/category/:slug").delete(requireSignin, isAdmin, deleteCategory);
 
 module.exports = router;
