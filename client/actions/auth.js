@@ -1,6 +1,7 @@
 import fetch from "isomorphic-fetch";
 import cookie from "js-cookie";
 import { API } from "../config/config";
+// import Router from "next/router";
 
 //Signup Action
 export const signUp = async (userData) => {
@@ -48,7 +49,7 @@ export const signout = async (next) => {
     const data = await fetch(`${API}/signout`, {
       method: "GET",
     });
-   return data;
+    return data;
   } catch (err) {
     return err.response.data.message;
   }
@@ -102,6 +103,7 @@ export const removeLocalStorage = (key) => {
 export const authenticateUSer = (data, next) => {
   setCookie("token", data.token);
   setLocalStorage("user", data.user);
+
   next();
 };
 

@@ -21,16 +21,17 @@ const { requireSignin } = require("../../middlewares/signinRequire");
 const { isAdmin } = require("../../middlewares/isAdmin");
 
 // const isAdmin = require("../../middlewares/isAdmin");
-
-router
-  .route("/category")
-  .post(
-    categoryCreateValidator,
-    runValidation,
-    requireSignin,
-    isAdmin,
-    createCategory
-  );
+const check = (_, __, next) => {
+  console.log(`came until here`);
+  next();
+};
+router.route("/category").post(
+  categoryCreateValidator,
+  runValidation,
+  requireSignin,
+  isAdmin,
+  createCategory
+);
 
 router.route("/categories").get(allCategories);
 router.route("/category/:slug").get(singleCategory);

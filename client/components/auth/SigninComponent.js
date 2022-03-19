@@ -10,17 +10,17 @@ const SigninComponent = () => {
     error: "",
     loading: false,
   });
+  const router = useRouter();
 
   const routeOnLogin = () => {
     if (isAuth() && isAuth().role === 0) {
       router.push("/user");
     }
-     if(isAuth() && isAuth().role === 1) {
+    if (isAuth() && isAuth().role === 1) {
       router.push("/admin");
     }
   };
 
-  const router = useRouter();
   //getting out the values form values variable above
 
   const { email, password, error, loading } = values;

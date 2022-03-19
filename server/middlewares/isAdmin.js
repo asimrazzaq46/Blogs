@@ -1,3 +1,5 @@
+const User = require("../models/users");
+
 // const isAdmin = (req, res, next) => {
 //   //assigned req.profile on signinrequire middleware...if the user is authenticated then req.profile = Loggedin user
 //   if (req.profile.role !== 1) {
@@ -24,8 +26,8 @@ exports.authMiddleware = async (req, res, next) => {
 
 exports.isAdmin = async (req, res, next) => {
   const adminUserId = req.user._id;
-  const user = await User.findById({ _id: adminUserId });
-  console.log("is Admin", user);
+  console.log("is Admin", adminUserId);
+  const user = await User.findOne({ _id: adminUserId });
 
   if (!user) {
     return res.status(400).json({

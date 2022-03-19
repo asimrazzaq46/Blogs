@@ -1,52 +1,63 @@
 import fetch from "isomorphic-fetch";
 import { API } from "../config/config";
+import { getCookie } from "./auth";
 
-//Create Category
-export const create = async (category, token) => {
+export const create = async (tag, token) => {
   try {
-    const response = await fetch(`${API}/category`, {
+    const response = await fetch(`${API}/tag`, {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(category),
+      body: JSON.stringify(tag),
     });
+
     return response.json();
   } catch (err) {
     console.log(err);
   }
 };
 
-// Get the list of all categories
-export const getCategories = async () => {
+//Get All tags
+export const allTags = async () => {
   try {
-    const response = await fetch(`${API}/categories`, {
+    const response = await fetch(`${API}/tags`, {
       method: "GET",
     });
+
     return response.json();
   } catch (err) {
     console.log(err);
   }
 };
 
-// Get the single category
-export const singleCategory = async (slug) => {
+//Get single Tag
+
+//Get All tags
+export const singleTag = async (slug, token) => {
   try {
-    const response = await fetch(`${API}/category/${slug}`, {
+    const response = await fetch(`${API}/tag/${slug}`, {
       method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
+
     return response.json();
   } catch (err) {
     console.log(err);
   }
 };
 
-// Delete category
-export const removeCategory = async (slug, token) => {
+//Delete Tag
+
+export const removeTag = async (slug, token) => {
   try {
-    const response = await fetch(`${API}/category/${slug}`, {
+    const response = await fetch(`${API}/tag/${slug}`, {
       method: "DELETE",
       headers: {
         Accept: "application/json",
@@ -54,6 +65,7 @@ export const removeCategory = async (slug, token) => {
         Authorization: `Bearer ${token}`,
       },
     });
+
     return response.json();
   } catch (err) {
     console.log(err);

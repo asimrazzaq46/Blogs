@@ -19,7 +19,7 @@ exports.createTag = catchAsynError(async (req, res) => {
 exports.allTags = catchAsynError(async (req, res) => {
   try {
     const tags = await Tags.find();
-    res.status(200).json({ tags });
+    res.status(200).json(tags);
   } catch (error) {
     res.status(404).json({ error });
   }

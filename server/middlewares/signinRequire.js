@@ -5,7 +5,7 @@ const expressJwt = require("express-jwt");
 
 exports.requireSignin = expressJwt({
   secret: "jgsdaiusy0324kjds", // req.user
-  algorithms: ["RS256"],
+  algorithms: ["HS256"],
 });
 
 // const isAuthenticated = catchAsyncError(async (req, res, next) => {
