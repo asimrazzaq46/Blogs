@@ -28,8 +28,4 @@ router.route("/admin").get(requireSignin, isAdmin, (req, res) => {
   });
 });
 
-router.route("/test").get(requireSignin, (req, res) => {
-  console.log(req.user);
-});
-
 module.exports = router;

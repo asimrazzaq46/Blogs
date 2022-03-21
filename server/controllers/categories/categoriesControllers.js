@@ -25,33 +25,37 @@ exports.allCategories = catchAsynError(async (req, res) => {
     const categories = await Category.find();
     res.status(200).json(categories);
   } catch (error) {
-    res.status(404).json({ error:  errorHandler(err) });
+    res.status(404).json({ error: errorHandler(error) });
   }
 });
 
 //Single CATEGORY
 exports.singleCategory = catchAsynError(async (req, res) => {
   try {
-    const category = await Category.find({ slug: req.params.slug.toLowerCase() });
+    const category = await Category.find({
+      slug: req.params.slug.toLowerCase(),
+    });
     if (!category.length) {
       return res.status(404).json({ error: "Category not exist." });
     }
     res.status(200).json(category);
   } catch (error) {
-    res.status(404).json({ error:  errorHandler(err) });
+    res.status(404).json({ error: errorHandler(error) });
   }
 });
 
 // DELETE CATEGORY
 exports.deleteCategory = catchAsynError(async (req, res) => {
   try {
-    const category = await Category.find({ slug: req.params.slug.toLowerCase() });
+    const category = await Category.find({
+      slug: req.params.slug.toLowerCase(),
+    });
     if (!category.length) {
       return res.status(404).json({ error: "Category not exist." });
     }
     await Category.findOneAndDelete({ slug: req.params.slug.toLowerCase() });
     res.status(200).json({ message: "deleted successfully" });
   } catch (error) {
-    res.status(404).json({ error:  errorHandler(err) });
+    res.status(404).json({ error: errorHandler(error) });
   }
 });

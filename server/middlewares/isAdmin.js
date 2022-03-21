@@ -14,7 +14,7 @@ const User = require("../models/users");
 exports.authMiddleware = async (req, res, next) => {
   const authUserId = req.user._id;
   const user = await User.findById({ _id: authUserId });
-  console.log(`is authenticated user`, user);
+
   if (err || !user) {
     return res.status(400).json({
       error: "User not found",
@@ -26,7 +26,6 @@ exports.authMiddleware = async (req, res, next) => {
 
 exports.isAdmin = async (req, res, next) => {
   const adminUserId = req.user._id;
-  console.log("is Admin", adminUserId);
   const user = await User.findOne({ _id: adminUserId });
 
   if (!user) {

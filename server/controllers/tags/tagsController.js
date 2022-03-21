@@ -28,9 +28,9 @@ exports.allTags = catchAsynError(async (req, res) => {
 //one tag
 exports.oneTag = catchAsynError(async (req, res) => {
   try {
-    console.log(req.params);
+    
     const tag = await Tags.findOne({ slug: req.params.slug.toLowerCase() });
-    console.log(tag);
+
     if (!tag) {
       res.status(404).json({ error: "Tags not Found" });
     }
