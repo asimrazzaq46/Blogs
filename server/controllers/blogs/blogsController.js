@@ -67,7 +67,7 @@ exports.createBlog = catchAsynError(async (req, res) => {
         }
 
         photo.data = fs.readFileSync(files.photo.filepath);
-        photo.contentType = files.photo.type;
+        photo.contentType = files.photo.mimetype;
       }
 
       const blog = await Blog.create({

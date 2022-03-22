@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 const SigninComponent = () => {
   //creating values for storing data with useState hook
   const [values, setValues] = useState({
-    email: "asim@hotmail.com",
+    email: "asim1@hotmail.com",
     password: "asim123",
     error: "",
     loading: false,

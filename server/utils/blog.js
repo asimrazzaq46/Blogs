@@ -5,10 +5,10 @@
 
 exports.smartTrim = (str, length, delim, appendix) => {
   if (str.length <= length) return str;
-  trimmedstr = str.substr(0, length + delim.length);
+ let trimmedstr = str.substr(0, length + delim.length);
   console.log(`trimmedstr 1 `, trimmedstr);
   //lastIndexOf give us the index value from backwards
-  var lastDelimIndex = trimmedstr.lastIndexOf(delim);
+  let lastDelimIndex = trimmedstr.lastIndexOf(delim);
   console.log(`lastDelimIndex `, lastDelimIndex);
 
   //  if in the end we have an empty space then we trimmed the string from 0 untill last space we found
@@ -18,6 +18,7 @@ exports.smartTrim = (str, length, delim, appendix) => {
   // then we are going to add three dots in the end of trimmed string
   if (trimmedstr) trimmedstr += appendix;
   console.log(`trimmedstr 2 `, trimmedstr);
+  let cleanText = trimmedstr.replace(/<\/?[^>]+(>|$)/g, "");
 
-  return trimmedstr;
+  return cleanText;
 };

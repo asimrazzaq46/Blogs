@@ -35,7 +35,7 @@ export const allTags = async () => {
 
 //Get single Tag
 
-//Get All tags
+
 export const singleTag = async (slug, token) => {
   try {
     const response = await fetch(`${API}/tag/${slug}`, {
