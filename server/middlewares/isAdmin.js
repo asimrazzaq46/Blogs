@@ -15,7 +15,7 @@ exports.authMiddleware = async (req, res, next) => {
   const authUserId = req.user._id;
   const user = await User.findById({ _id: authUserId });
 
-  if (err || !user) {
+  if (!user) {
     return res.status(400).json({
       error: "User not found",
     });
