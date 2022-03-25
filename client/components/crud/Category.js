@@ -3,6 +3,7 @@ import Link from "next/link";
 import Router from "next/router";
 
 import { isAuth, getCookie } from "../../actions/auth";
+import { list } from "../../actions/blog";
 import {
   create,
   getCategories,

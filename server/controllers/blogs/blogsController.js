@@ -232,6 +232,7 @@ exports.updateBlog = catchAsynError(async (req, res) => {
       oldBlog.photo.data = fs.readFileSync(files.photo.filepath);
       oldBlog.photo.contentType = files.photo.mimetype;
     }
+    oldBlog.save();
 
     res.status(200).json(oldBlog);
   });
