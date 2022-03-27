@@ -15,8 +15,8 @@ const app = express();
 
 // Setting Up config files
 dotenv.config({ path: "./config/config.env" });
-app.use(express.json());
-app.use(bodyparser.urlencoded({ extended: true }));
+app.use(express.json({ limit: "50mb" }));
+app.use(bodyparser.urlencoded({ limit: "50mb", extended: true }));
 app.use(cookieParser());
 app.use(morgan("dev"));
 if (process.env.NODE_ENV === "development") {

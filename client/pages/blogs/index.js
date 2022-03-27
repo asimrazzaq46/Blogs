@@ -101,7 +101,7 @@ const Blogs = ({
     return (
       categories &&
       categories.map((category, i) => (
-        <Link href={`/categories/${category.slug}`}>
+        <Link key={i} href={`/categories/${category.slug}`}>
           <a className="btn btn-primary mr-1 ml-1 mt-3">{category.name}</a>
         </Link>
       ))
@@ -112,7 +112,7 @@ const Blogs = ({
     return (
       tags &&
       tags.map((tag, i) => (
-        <Link href={`/tags/${tag.slug}`}>
+        <Link key={i} href={`/tags/${tag.slug}`}>
           <a className="btn btn-outline-primary mr-1 ml-1 mt-3">{tag.name}</a>
         </Link>
       ))
@@ -153,7 +153,7 @@ const Blogs = ({
 
 Blogs.getInitialProps = async () => {
   let skip = 0;
-  let limit = 2;
+  let limit = 4;
   const data = await listBlogsCategoriesTags(skip, limit);
   if (data.error) {
     console.log(`error in blog Pages`, data.error);

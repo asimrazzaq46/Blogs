@@ -54,3 +54,54 @@ export const singleBlog = async (slug) => {
 
   return response.json();
 };
+
+//////////////LIST OF ALL BLOGS CATEGORIES AND TAGS//////////////////
+
+export const listOfRelatedBlogs = async (blog) => {
+  const response = await fetch(`${API}/blog/related`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(blog),
+  });
+
+  const data = await response.json();
+
+  return data;
+};
+
+////////////// UPDATE BLOG //////////////////
+
+export const updateBlog = async (blogdata, slug, token) => {
+  const response = await fetch(`${API}/blog/${slug}`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: blogdata,
+  });
+
+  const data = await response.json();
+
+  return data;
+};
+
+////////////// DELETE BLOG //////////////////
+
+export const deleteBlog = async (slug, token) => {
+  const response = await fetch(`${API}/blog/${slug}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+
+  return data;
+};

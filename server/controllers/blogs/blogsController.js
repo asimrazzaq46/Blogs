@@ -209,18 +209,30 @@ exports.updateBlog = catchAsynError(async (req, res) => {
       oldBlog.mdesc = stripHtml(body.substring(0, 160)).result;
     }
 
+    if (body && body.length < 200) {
+      return res.status(404).json({ error: "content is too short" });
+    }
+
     //Updating the categories
     if (categories) {
       oldBlog.categories = categories.split(",");
+    }
+    if (categories && categories.length === 0) {
+      return res.status(404).json({ error: "Atleast 1 category is required" });
     }
 
     //Updating the Tags
     if (tags) {
       oldBlog.tags = tags.split(",");
     }
-
+    if (tags && tags.length === 0) {
+      return res.status(404).json({ error: "Atleast 1 tag is required" });
+    }
     if (title) {
       oldBlog.title = title;
+    }
+    if (title && !title.length) {
+      return res.status(404).json({ error: "Title is required" });
     }
 
     if (files.photo) {
@@ -248,4 +260,28 @@ exports.getBlogPhoto = catchAsynError(async (req, res) => {
     .status(200)
     .set("Content-Type", blog.photo.contentType)
     .send(blog.photo.data);
+});
+
+////////////////////////////////// RELATED BLOGS  /////////////////////////
+
+exports.relatedBlogs = catchAsynError(async (req, res) => {
+  let limit = req.body.limit ? parseInt(req.body.limit) : 3;
+  const { _id, categories } = req.body;
+
+  const blogs = await Blog.find({
+    _id: { $ne: _id },
+    categories: { $in: categories },
+  })
+    .limit(limit)
+    .populate("postedBy", "_id name profile")
+    .select("title slug excerpt postedBy createdAt updatedAt");
+
+  if (!blogs || blogs.length === 0) {
+    res.json({ error: "No related blogs are available!" });
+  }
+  blogs.map((blog) => {
+    console.log(`blogs in relatedBlogs controller`, blog.slug);
+  });
+
+  res.json(blogs);
 });

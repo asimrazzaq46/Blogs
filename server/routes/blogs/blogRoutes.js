@@ -10,6 +10,7 @@ const {
   deleteBlog,
   updateBlog,
   getBlogPhoto,
+  relatedBlogs,
 } = require("../../controllers/blogs/blogsController");
 
 // Authentication middleware
@@ -23,5 +24,6 @@ router.route("/blog/:slug").get(getSingleBlog);
 router.route("/blog/:slug").delete(requireSignin, isAdmin, deleteBlog);
 router.route("/blog/:slug").put(requireSignin, isAdmin, updateBlog);
 router.route("/blog/photo/:slug").get(getBlogPhoto);
+router.route("/blog/related").post(relatedBlogs);
 
 module.exports = router;

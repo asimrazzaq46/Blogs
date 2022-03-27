@@ -1,16 +1,17 @@
 import Head from "next/head";
 import Link from "next/link";
-import { Fragment, useState } from "react";
-import { withRouter } from "next/router";
+import { Fragment, useState, useEffect } from "react";
 import moment from "moment";
 import renderHtml from "react-render-html";
 
 import Layout from "../../components/Layout";
-import Card from "../../components/blog/Card";
-import { singleBlog } from "../../actions/blog";
+import SmallCard from "../../components/blog/SmallCard";
+import { singleBlog, listOfRelatedBlogs } from "../../actions/blog";
 import { API, Domain, APP_NAME } from "../../config/config";
 
-const singleBlogPage = ({ blog,asPath }) => {
+const singleBlogPage = ({ blog, asPath, router }) => {
+  const [related, setRelated] = useState([]);
+
   const head = () => {
     return (
       <Head>
@@ -21,10 +22,7 @@ const singleBlogPage = ({ blog,asPath }) => {
         <meta name="description" content={`${blog.mdesc}`} />
         <link rel="canonical" href={`${Domain}${asPath}`} />
         <meta property="og:title" content={`${blog.title} | ${APP_NAME}`} />
-        <meta
-          property="og:description"
-          content={blog.mdesc}
-        />
+        <meta property="og:description" content={blog.mdesc} />
         <meta property="og:type" content={`Website`} />
         <meta property="og:url" content={`${Domain}${asPath}`} />
         <meta property="og:site_name" content={`${APP_NAME}`} />
@@ -39,11 +37,30 @@ const singleBlogPage = ({ blog,asPath }) => {
     );
   };
 
+  const loadRelated = async () => {
+    const data = await listOfRelatedBlogs(blog);
+    if (data.error) {
+      console.log(`error in load related in slug page`, data.error);
+    } else {
+      return setRelated(data);
+    }
+  };
+
+  const renderRelatedBlog = () => {
+    return related.map((blog, i) => (
+      <div key={i} className="col-md-4">
+        <article>
+          <SmallCard blog={blog} />
+        </article>
+      </div>
+    ));
+  };
+
   const showAllCategories = () => {
     return (
       blog.categories &&
       blog.categories.map((category, i) => (
-        <Link href={`/categories/${category.slug}`}>
+        <Link key={i} href={`/categories/${category.slug}`}>
           <a className="btn btn-primary mr-1 ml-1 mt-3">{category.name}</a>
         </Link>
       ))
@@ -54,12 +71,16 @@ const singleBlogPage = ({ blog,asPath }) => {
     return (
       blog.tags &&
       blog.tags.map((tag, i) => (
-        <Link href={`/tags/${tag.slug}`}>
+        <Link key={i} href={`/tags/${tag.slug}`}>
           <a className="btn btn-outline-primary mr-1 ml-1 mt-3">{tag.name}</a>
         </Link>
       ))
     );
   };
+
+  useEffect(() => {
+    loadRelated();
+  }, [router]);
 
   return (
     <Fragment>
@@ -75,7 +96,6 @@ const singleBlogPage = ({ blog,asPath }) => {
                     alt={`${blog.title}`}
                     className="img img-fluid feature-image"
                   />
-
                 </div>
               </section>
 
@@ -107,7 +127,7 @@ const singleBlogPage = ({ blog,asPath }) => {
               <div className="container pb-5">
                 <h4 className="text-center pt-5 pb-5 h2">Related Blogs</h4>
                 <hr />
-                <p> Show Related Blogs</p>
+                <div className="row">{renderRelatedBlog()}</div>
               </div>
               <div className="container pb-5">
                 <p> Show Comments</p>
@@ -120,14 +140,14 @@ const singleBlogPage = ({ blog,asPath }) => {
   );
 };
 
-singleBlogPage.getInitialProps = async ({ query,asPath }) => {
+singleBlogPage.getInitialProps = async ({ query, asPath, router }) => {
   const data = await singleBlog(query.slug);
 
   return {
     blog: data,
-    asPath
-    
+    asPath,
+    router,
   };
 };
 
-export default (singleBlogPage);
+export default singleBlogPage;

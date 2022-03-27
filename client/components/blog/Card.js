@@ -5,7 +5,7 @@ import { API } from "../../config/config";
 
 const Card = ({ blog }) => {
   const showBlogCategories = (categories) => {
-    return categories.map((category, i) => (
+    return categories && categories.map((category, i) => (
       <Link key={i} href={`/categories/${category.slug}`}>
         <a className="btn btn-primary ml-1 mr-1 mt-3">{category.name}</a>
       </Link>
@@ -13,7 +13,7 @@ const Card = ({ blog }) => {
   };
 
   const showBlogTags = (tags) => {
-    return tags.map((tag, i) => (
+    return tags && tags.map((tag, i) => (
       <Link key={i} href={`/tags/${tag.slug}`}>
         <a className="btn btn-outline-primary ml-1 mr-1 mt-3">{tag.name}</a>
       </Link>
@@ -33,8 +33,10 @@ const Card = ({ blog }) => {
       </header>
       <section>
         <p className="mark ml-1 pt-2 pb-2">
-          Written by {blog.postedBy?.name} | published{" "}
-          {moment(blog.updatedAt).fromNow()}
+        
+            Written by {blog.postedBy?.name} | published{" "}
+            {moment(blog.updatedAt).fromNow()}
+         
         </p>
       </section>
       <section>
@@ -49,7 +51,7 @@ const Card = ({ blog }) => {
             <Link href={`blogs/${blog.slug}`}>
               <img
                 className="img img-fluid"
-                style={{ maxHeight: "150px", width: "auto" ,cursor:'pointer' }}
+                style={{ maxHeight: "auto", width: "100%", cursor: "pointer" }}
                 src={`${API}/blog/photo/${blog.slug}`}
                 alt={blog.title}
               />

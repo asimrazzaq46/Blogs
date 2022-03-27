@@ -32,12 +32,13 @@ exports.allCategories = catchAsynError(async (req, res) => {
 //Single CATEGORY
 exports.singleCategory = catchAsynError(async (req, res) => {
   try {
-    const category = await Category.find({
+    const category = await Category.findOne({
       slug: req.params.slug.toLowerCase(),
     });
-    if (!category.length) {
+    if (!category) {
       return res.status(404).json({ error: "Category not exist." });
     }
+    console.log(`backend `, category);
     res.status(200).json(category);
   } catch (error) {
     res.status(404).json({ error: errorHandler(error) });

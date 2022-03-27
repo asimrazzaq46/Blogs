@@ -24,7 +24,7 @@ exports.allTags = catchAsynError(async (req, res) => {
     res.status(404).json({ error });
   }
 });
-
+  
 //one tag
 exports.oneTag = catchAsynError(async (req, res) => {
   try {
