@@ -2,26 +2,26 @@ import Head from "next/head";
 import { Fragment } from "react";
 
 import Layout from "../../components/Layout";
-import { singleCategory } from "../../actions/category";
+import { singleTag } from "../../actions/tag";
 import { Domain, APP_NAME } from "../../config/config";
 import Card from "../../components/blog/Card";
 
-const Categories = ({ category, blogs, error, asPath }) => {
+const Tags = ({ tag, blogs, asPath, error }) => {
   const head = () => {
     return (
       <Head>
         <title>
-          {category.name} | {APP_NAME}
+          {tag.name} | {APP_NAME}
         </title>
         <meta
           name="description"
-          content={`${category.name} on ${APP_NAME} website`}
+          content={`${tag.name} on ${APP_NAME} website`}
         />
         <link rel="canonical" href={`${Domain}${asPath}`} />
-        <meta property="og:title" content={`${category.name} | ${APP_NAME}`} />
+        <meta property="og:title" content={`${tag.name} | ${APP_NAME}`} />
         <meta
           property="og:description"
-          content={`${category.name} on ${APP_NAME} website`}
+          content={`${tag.name} on ${APP_NAME} website`}
         />
         <meta property="og:type" content={`Website`} />
         <meta property="og:url" content={`${Domain}${asPath}`} />
@@ -36,6 +36,7 @@ const Categories = ({ category, blogs, error, asPath }) => {
       </Head>
     );
   };
+
   const showError = () => {
     return (
       <p
@@ -46,6 +47,7 @@ const Categories = ({ category, blogs, error, asPath }) => {
       </p>
     );
   };
+
   return (
     <Fragment>
       {head()}
@@ -54,8 +56,9 @@ const Categories = ({ category, blogs, error, asPath }) => {
           <div className="container-fluid text-center">
             <header>
               <div className="col-md-12 pt-3">
-                <h1 className="display-4 font-weight-bold">{category.name}</h1>
+                <h1 className="deisplay-4 font-weight-bold">{tag.name}</h1>
                 <hr />
+
                 {showError()}
                 {blogs?.map((blog, i) => (
                   <div>
@@ -72,21 +75,20 @@ const Categories = ({ category, blogs, error, asPath }) => {
   );
 };
 
-Categories.getInitialProps = async ({ query, asPath }) => {
-  const data = await singleCategory(query.slug);
-  console.log(data);
+Tags.getInitialProps = async ({ query, asPath }) => {
+  const data = await singleTag(query.slug);
   if (data.error) {
     return {
       error: data.error,
-      category: data.category,
+      tag: data.tag,
     };
   } else {
     return {
-      category: data.category,
-      blogs: data.blogs,
+      tag: data.tag,
+      blogs: data.blog,
       asPath,
     };
   }
 };
 
-export default Categories;
+export default Tags;

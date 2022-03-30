@@ -1,4 +1,5 @@
 const Category = require("../../models/category");
+const Blog = require("../../models/blog");
 const catchAsynError = require("../../middlewares/catchAsncError");
 const { errorHandler } = require("../../utils/dbErrorHandlers");
 
@@ -38,8 +39,19 @@ exports.singleCategory = catchAsynError(async (req, res) => {
     if (!category) {
       return res.status(404).json({ error: "Category not exist." });
     }
-    console.log(`backend `, category);
-    res.status(200).json(category);
+    const blogs = await Blog.find({ categories: category })
+      .populate("categories", "_id name slug")
+      .populate("tags", "_id name slug")
+      .populate("postedBy", "_id name")
+      .select(
+        "_id title slug excerpt categories slug postedBy createdAt updatedAt"
+      );
+
+    if (!blogs || !blogs.length) {
+      return res.status(404).json({ error: "No blog is found!", category });
+    }
+
+    res.status(200).json({ category, blogs });
   } catch (error) {
     res.status(404).json({ error: errorHandler(error) });
   }

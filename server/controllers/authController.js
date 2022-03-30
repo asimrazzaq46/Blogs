@@ -15,12 +15,21 @@ exports.signUp = catchAsynError(async (req, res) => {
     return res.status(404).json({ error: "Email is already exist" });
   }
 
+  const nameCap = name.split(" ");
+
+  const newName =
+    nameCap[0].charAt(0).toUpperCase() +
+    nameCap[0].slice(1) +
+    " " +
+    nameCap[1].charAt(0).toUpperCase() +
+    nameCap[1].slice(1);
+  console.log(`new name`, newName);
   // creating unique username everytime and saving them into database for every new users
   let username = shortId.generate();
   let profile = `${process.env.CLIENT_URL}/profile/${username}`;
 
   await User.create({
-    name,
+    name: newName,
     email,
     password,
     profile,

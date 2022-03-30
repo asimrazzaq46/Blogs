@@ -1,4 +1,5 @@
 const Tags = require("../../models/tags");
+const Blog = require("../../models/blog");
 const catchAsynError = require("../../middlewares/catchAsncError");
 
 const slugify = require("slugify");
@@ -24,17 +25,29 @@ exports.allTags = catchAsynError(async (req, res) => {
     res.status(404).json({ error });
   }
 });
-  
+
 //one tag
 exports.oneTag = catchAsynError(async (req, res) => {
   try {
-    
     const tag = await Tags.findOne({ slug: req.params.slug.toLowerCase() });
 
     if (!tag) {
-      res.status(404).json({ error: "Tags not Found" });
+      return res.status(404).json({ error: "Tags not Found" });
     }
-    res.status(200).json(tag);
+
+    const blog = await Blog.find({ tags: tag })
+      .populate("categories", "_id name slug")
+      .populate("tags", "_id name slug")
+      .populate("postedBy", "_id name")
+      .select(
+        "_id title slug excerpt categories slug postedBy createdAt updatedAt"
+      );
+
+    if (!blog || !blog.length) {
+      return res.status(404).json({ error: "No blog is found!", tag });
+    }
+
+    res.status(200).json({ tag, blog });
   } catch (error) {
     res.status(404).json({ error });
   }

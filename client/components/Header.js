@@ -19,6 +19,7 @@ import {
   DropdownItem,
   NavbarText,
 } from "reactstrap";
+import Search from "./blog/Search";
 
 import { APP_NAME } from "../config/config";
 
@@ -32,7 +33,7 @@ const Header = () => {
     setIsOpen(!isOpen);
   };
   return (
-    <div>
+    <Fragment>
       <Navbar color="light" expand="md" light>
         <Link href="/">
           <NavLink style={{ cursor: "pointer" }} className="font-weight-bold">
@@ -42,15 +43,13 @@ const Header = () => {
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
-
-          <Fragment>
-                <NavItem>
-                  <Link href="/blogs">
-                    <NavLink style={{ cursor: "pointer" }}>blogs</NavLink>
-                  </Link>
-                </NavItem>
-                
-              </Fragment>
+            <Fragment>
+              <NavItem>
+                <Link href="/blogs">
+                  <NavLink style={{ cursor: "pointer" }}>blogs</NavLink>
+                </Link>
+              </NavItem>
+            </Fragment>
 
             {!isAuth() && (
               <Fragment>
@@ -96,7 +95,8 @@ const Header = () => {
           </Nav>
         </Collapse>
       </Navbar>
-    </div>
+      <Search />
+    </Fragment>
   );
 };
 

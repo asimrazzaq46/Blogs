@@ -279,9 +279,36 @@ exports.relatedBlogs = catchAsynError(async (req, res) => {
   if (!blogs || blogs.length === 0) {
     res.json({ error: "No related blogs are available!" });
   }
-  blogs.map((blog) => {
-    console.log(`blogs in relatedBlogs controller`, blog.slug);
-  });
+ 
 
   res.json(blogs);
+});
+
+////////////////////////////////// SEARCH BLOGS  /////////////////////////
+
+exports.searchBlog = catchAsynError(async (req, res) => {
+  const { search } = req.query;
+  if (search) {
+    const blog = await Blog.find({
+      $or: [
+        {
+          title: {
+            $regex: search,
+            $options: "i",
+          },
+        },
+        {
+          body: {
+            $regex: search,
+            $options: "i",
+          },
+        },
+      ],
+    }).select("-photo -body");
+
+    if (!blog || !blog.length) {
+      return res.status(404).json({ error: "No result!" });
+    }
+    res.status(200).json(blog);
+  }
 });

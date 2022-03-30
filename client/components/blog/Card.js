@@ -48,7 +48,7 @@ const Card = ({ blog }) => {
       <div className="row">
         <div className="col-md-4">
           <section>
-            <Link href={`blogs/${blog.slug}`}>
+            <Link href={`/blogs/${blog.slug}`}>
               <img
                 className="img img-fluid"
                 style={{ maxHeight: "auto", width: "100%", cursor: "pointer" }}
@@ -61,7 +61,7 @@ const Card = ({ blog }) => {
         <div className="col-md-8">
           <section>
             <div className="pb-3">{blog.excerpt}</div>
-            <Link href={`blogs/${blog.slug}`}>
+            <Link href={`/blogs/${blog.slug}`}>
               <a className="btn btn-primary pt-2">Read more</a>
             </Link>
           </section>

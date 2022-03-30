@@ -35,15 +35,13 @@ export const allTags = async () => {
 
 //Get single Tag
 
-
-export const singleTag = async (slug, token) => {
+export const singleTag = async (slug) => {
   try {
     const response = await fetch(`${API}/tag/${slug}`, {
       method: "GET",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
     });
 
