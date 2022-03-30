@@ -4,20 +4,28 @@ import moment from "moment";
 import { API } from "../../config/config";
 
 const Card = ({ blog }) => {
+  const username = blog.postedBy.profile.split("/").slice(-1).toString();
+
   const showBlogCategories = (categories) => {
-    return categories && categories.map((category, i) => (
-      <Link key={i} href={`/categories/${category.slug}`}>
-        <a className="btn btn-primary ml-1 mr-1 mt-3">{category.name}</a>
-      </Link>
-    ));
+    return (
+      categories &&
+      categories.map((category, i) => (
+        <Link key={i} href={`/categories/${category.slug}`}>
+          <a className="btn btn-primary ml-1 mr-1 mt-3">{category.name}</a>
+        </Link>
+      ))
+    );
   };
 
   const showBlogTags = (tags) => {
-    return tags && tags.map((tag, i) => (
-      <Link key={i} href={`/tags/${tag.slug}`}>
-        <a className="btn btn-outline-primary ml-1 mr-1 mt-3">{tag.name}</a>
-      </Link>
-    ));
+    return (
+      tags &&
+      tags.map((tag, i) => (
+        <Link key={i} href={`/tags/${tag.slug}`}>
+          <a className="btn btn-outline-primary ml-1 mr-1 mt-3">{tag.name}</a>
+        </Link>
+      ))
+    );
   };
 
   return (
@@ -33,10 +41,11 @@ const Card = ({ blog }) => {
       </header>
       <section>
         <p className="mark ml-1 pt-2 pb-2">
-        
-            Written by {blog.postedBy?.name} | published{" "}
-            {moment(blog.updatedAt).fromNow()}
-         
+          Written by{" "}
+          <Link href={`/profile/${username}`}>
+            <a className="lead ">{blog.postedBy?.name}</a>
+          </Link>{" "}
+          | published {moment(blog.updatedAt).fromNow()}
         </p>
       </section>
       <section>

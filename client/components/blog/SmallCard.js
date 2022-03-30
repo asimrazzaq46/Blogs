@@ -6,6 +6,7 @@ import renderHtml from "react-render-html";
 import { API } from "../../config/config";
 
 const SmallCard = ({ blog }) => {
+  const username = blog.postedBy.profile.split("/").slice(-1).toString();
   return (
     <div className="card">
       <section>
@@ -28,7 +29,7 @@ const SmallCard = ({ blog }) => {
       </div>
       <div className="card-body">
         Posted {moment(blog.updatedAt).fromNow()} by{" "}
-        <Link href="/">
+        <Link href={`/profile/${username}`}>
           <a className="float-right">{blog.postedBy.name}</a>
         </Link>
       </div>
