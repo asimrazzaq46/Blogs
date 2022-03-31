@@ -269,7 +269,7 @@ const BlogCreate = ({ router }) => {
                 Upload featured image
                 <input
                   type="file"
-                  accept="image/*"
+                  accept="image/*"  
                   onChange={changeHandler("photo")}
                   hidden
                 />

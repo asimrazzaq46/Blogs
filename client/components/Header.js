@@ -45,6 +45,11 @@ const Header = () => {
           <Nav className="ml-auto" navbar>
             <Fragment>
               <NavItem>
+                <Link href="/user/crud/create">
+                  <NavLink style={{ cursor: "pointer" }} className='btn btn-primary text-light'>Create Blog</NavLink>
+                </Link>
+              </NavItem>
+              <NavItem>
                 <Link href="/blogs">
                   <NavLink style={{ cursor: "pointer" }}>blogs</NavLink>
                 </Link>

@@ -14,15 +14,11 @@ const adminindex = () => {
             <div className="col-md-4">
               <ul className="list-group">
                 <li className="list-group-item">
-                  <Link href="admin/crud/category-tag">
-                    <a>Create Category</a>
-                  </Link>
-                </li>
-                <li className="list-group-item">
                   <Link href="/admin/crud/category-tag">
-                    <a>Create Tag</a>
+                    <a>Create Category And Tags</a>
                   </Link>
                 </li>
+
                 <li className="list-group-item">
                   <Link href="/admin/crud/blog">
                     <a>Create Blog</a>
@@ -31,6 +27,11 @@ const adminindex = () => {
                 <li className="list-group-item">
                   <Link href="/admin/crud/blogs">
                     <a>Update/Delete Blog</a>
+                  </Link>
+                </li>
+                <li className="list-group-item">
+                  <Link href="/user/update">
+                    <a>Update Profile</a>
                   </Link>
                 </li>
               </ul>

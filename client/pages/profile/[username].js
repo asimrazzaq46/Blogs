@@ -64,13 +64,23 @@ const PublicProfile = ({ user, blogs, error, asPath }) => {
             <div className="col-md-12">
               <div className="card">
                 <div className="card-body">
-                  <h5>{user.name}</h5>
-                  <Link href={user.profile}>
-                    <a>View Profile</a>
-                  </Link>
-                  <p className="text-muted">
-                    Joined {moment(user.createdAt).fromNow()}
-                  </p>
+                  <div className="row">
+                    <div className="col-md-8">
+                      <h5>{user.name}</h5>
+
+                      <p className="text-muted">
+                        Joined {moment(user.createdAt).fromNow()}
+                      </p>
+                    </div>
+                    <div className="col-md-4">
+                      <img
+                        className="img img-fluid img-thumbnail mb-3"
+                        src={`${API}/profile/photo/${user.username}`}
+                        style={{ maxHeight: "200px", maxWidth: "100%" }}
+                        alt={`${user.name} profile photo`}
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
