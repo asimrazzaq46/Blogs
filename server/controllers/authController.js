@@ -1,4 +1,5 @@
 const User = require("../models/users");
+const Blog = require("../models/blog");
 const shortId = require("shortid");
 const catchAsynError = require("../middlewares/catchAsncError");
 
@@ -73,7 +74,9 @@ exports.signIn = catchAsynError(async (req, res) => {
   const token = await user.getJwtToken();
   //TO-DO httpOnly:true
   const options = {
-    expireIn: "1d",
+    expires: new Date(
+      Date.now() + process.env.COOKIE_EXPIRE_TIME * 24 * 60 * 60 * 1000
+    ),
     httpOnly: true,
     secure: false,
   };
@@ -90,4 +93,20 @@ exports.signIn = catchAsynError(async (req, res) => {
 
 exports.signOut = catchAsynError(async (req, res) => {
   res.clearCookie("token").status(200).json({ message: "Logout Succefully." });
+});
+
+/////////////////// Only Authenticated User Can Update And Delete /////////////////////
+
+exports.canUpdateAndDelete = catchAsynError(async (req, res, next) => {
+  const slug = req.params.slug.toLowerCase();
+  const blog = await Blog.findOne({ slug });
+  const authorizedUser =
+    blog.postedBy._id.toString() === req.profile._id.toString();
+  if (!authorizedUser) {
+    return res
+      .status(400)
+      .json({ error: "Only the user who create this can Delete this blog!" });
+  }
+
+  next();
 });

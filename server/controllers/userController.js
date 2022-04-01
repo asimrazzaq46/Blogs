@@ -63,7 +63,9 @@ exports.updateProfile = catchAsncError(async (req, res) => {
           .status(400)
           .json({ error: "password must be 6 charecters long!" });
       }
-
+      if (fields.username) {
+        user.profile = `${process.env.CLIENT_URL}/profile/${fields.username}`;
+      }
       if (files.photo) {
         if (files.photo.size > 10000000) {
           return res

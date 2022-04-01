@@ -6,11 +6,12 @@ import renderHtml from "react-render-html";
 
 import Layout from "../../components/Layout";
 import SmallCard from "../../components/blog/SmallCard";
+import DisqusThread from "../../components/disqus_comments/DisqusThread";
 import { singleBlog, listOfRelatedBlogs } from "../../actions/blog";
 import { API, Domain, APP_NAME } from "../../config/config";
 
 const singleBlogPage = ({ blog, asPath, router }) => {
-  const username = blog.postedBy.profile.split("/").slice(-1).toString();
+  const { username } = blog.postedBy;
 
   const [related, setRelated] = useState([]);
 
@@ -80,6 +81,18 @@ const singleBlogPage = ({ blog, asPath, router }) => {
     );
   };
 
+  const showComments = () => {
+    return (
+      <div>
+        <DisqusThread
+          id={blog._id}
+          title={blog.title}
+          path={`/blogs/${blog.slug}`}
+        />
+      </div>
+    );
+  };
+
   useEffect(() => {
     loadRelated();
   }, [router]);
@@ -134,9 +147,7 @@ const singleBlogPage = ({ blog, asPath, router }) => {
                 <hr />
                 <div className="row">{renderRelatedBlog()}</div>
               </div>
-              <div className="container pb-5">
-                <p> Show Comments</p>
-              </div>
+              <div className="container pt-5 pb-5">{showComments()}</div>
             </div>
           </article>
         </main>

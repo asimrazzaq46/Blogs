@@ -1,11 +1,14 @@
 import fetch from "isomorphic-fetch";
 import { API } from "../config/config";
+import { isAuth, handleResponse } from "./auth";
 import querystring from "query-string";
 
 //////////////CREATE BLOG//////////////////
 export const create = async (blogData, token) => {
+  const url =
+    isAuth() && isAuth().role === 1 ? `${API}/blog` : `${API}/user/blog`;
   try {
-    const response = await fetch(`${API}/blog`, {
+    const response = await fetch(`${url}`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -13,16 +16,22 @@ export const create = async (blogData, token) => {
       },
       body: blogData,
     });
-
-    return response.json();
+    handleResponse(response);
+    const data = await response.json();
+    return data;
   } catch (err) {
-    console.log(err);
+    return err;
   }
 };
 
 //////////////LIST OF ALL BLOGS//////////////////
-export const list = async () => {
-  const response = await fetch(`${API}/blogs`, {
+export const list = async (username) => {
+  const url =
+    isAuth() && isAuth().username === username
+      ? `${API}/${username}/blogs`
+      : `${API}/blogs`;
+
+  const response = await fetch(`${url}`, {
     method: "GET",
   });
 
@@ -76,7 +85,9 @@ export const listOfRelatedBlogs = async (blog) => {
 ////////////// UPDATE BLOG //////////////////
 
 export const updateBlog = async (blogdata, slug, token) => {
-  const response = await fetch(`${API}/blog/${slug}`, {
+  const url =
+    isAuth() && isAuth().role === 1 ? `${API}/blog` : `${API}/user/blog`;
+  const response = await fetch(`${url}/${slug}`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
@@ -84,7 +95,7 @@ export const updateBlog = async (blogdata, slug, token) => {
     },
     body: blogdata,
   });
-
+handleResponse(response)
   const data = await response.json();
 
   return data;
@@ -93,7 +104,9 @@ export const updateBlog = async (blogdata, slug, token) => {
 ////////////// DELETE BLOG //////////////////
 
 export const deleteBlog = async (slug, token) => {
-  const response = await fetch(`${API}/blog/${slug}`, {
+  const url =
+    isAuth() && isAuth().role === 1 ? `${API}/blog` : `${API}/user/blog`;
+  const response = await fetch(`${url}/${slug}`, {
     method: "DELETE",
     headers: {
       Accept: "application/json",
@@ -101,7 +114,7 @@ export const deleteBlog = async (slug, token) => {
       Authorization: `Bearer ${token}`,
     },
   });
-
+handleResponse(response)
   const data = await response.json();
 
   return data;
@@ -110,18 +123,12 @@ export const deleteBlog = async (slug, token) => {
 ////////////// SEARCH BLOG //////////////////
 
 export const searchBlogs = async (params) => {
-  console.log(`Search params action`, params);
-
   let query = querystring.stringify(params);
-
-  console.log(`Search query action`, query);
 
   const response = await fetch(`${API}/blogs/search?${query}`, {
     method: "GET",
   });
-  if (response.error) {
-    console.log(`search Blog action`, response.error);
-  }
+
   const data = await response.json();
 
   return data;

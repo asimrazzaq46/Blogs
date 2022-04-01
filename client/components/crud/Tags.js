@@ -21,7 +21,12 @@ const Tags = () => {
 
   //Form input values change handler
   const chnageHandler = (e) => {
-    setValues({ ...values, name: e.target.value, error: false });
+    setValues({
+      ...values,
+      name: e.target.value,
+      error: false,
+      success: false,
+    });
   };
 
   // form submition handler

@@ -6,7 +6,7 @@ import renderHtml from "react-render-html";
 import { API } from "../../config/config";
 
 const SmallCard = ({ blog }) => {
-  const username = blog.postedBy.profile.split("/").slice(-1).toString();
+  const { username } = blog.postedBy;
   return (
     <div className="card">
       <section>

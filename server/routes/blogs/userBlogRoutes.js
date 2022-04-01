@@ -4,24 +4,28 @@ const router = express.Router();
 // Imported Controllers functions
 const {
   createBlog,
-  getAllBlog,
-  getAllBlogsCategoriesTags,
-  getSingleBlog,
+  getAllBlogByUser,
   deleteBlog,
   updateBlog,
-  getBlogPhoto,
-  relatedBlogs,
-  searchBlog,
 } = require("../../controllers/blogs/blogsController");
 
 // Authentication middleware
 const { requireSignin } = require("../../middlewares/signinRequire");
 const { authMiddleware } = require("../../middlewares/isAdmin");
-
+const { canUpdateAndDelete } = require("../../controllers/authController");
+//create
 router.route("/user/blog").post(requireSignin, authMiddleware, createBlog);
+
+//LIST
+router.route("/:username/blogs").get(getAllBlogByUser);
+
+//update
 router
   .route("/user/blog/:slug")
-  .delete(requireSignin, authMiddleware, deleteBlog);
-router.route("/user/blog/:slug").put(requireSignin, authMiddleware, updateBlog);
+  .put(requireSignin, authMiddleware, canUpdateAndDelete, updateBlog);
 
+//delete
+router
+  .route("/user/blog/:slug")
+  .delete(requireSignin, authMiddleware, canUpdateAndDelete, deleteBlog);
 module.exports = router;

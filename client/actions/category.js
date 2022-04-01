@@ -1,9 +1,11 @@
 import fetch from "isomorphic-fetch";
 import { API } from "../config/config";
+import { handleResponse } from "./auth";
 
 //Create Category
 export const create = async (category, token) => {
-  try {
+  
+  
     const response = await fetch(`${API}/category`, {
       method: "POST",
       headers: {
@@ -13,10 +15,9 @@ export const create = async (category, token) => {
       },
       body: JSON.stringify(category),
     });
+    handleResponse(response)
     return response.json();
-  } catch (err) {
-    console.log(err);
-  }
+ 
 };
 
 // Get the list of all categories
@@ -27,7 +28,7 @@ export const getCategories = async () => {
     });
     return response.json();
   } catch (err) {
-    console.log(err);
+    return err;
   }
 };
 
@@ -39,13 +40,13 @@ export const singleCategory = async (slug) => {
     });
     return response.json();
   } catch (err) {
-    console.log(err);
+    return err;
   }
 };
 
 // Delete category
 export const removeCategory = async (slug, token) => {
-  try {
+ 
     const response = await fetch(`${API}/category/${slug}`, {
       method: "DELETE",
       headers: {
@@ -54,8 +55,7 @@ export const removeCategory = async (slug, token) => {
         Authorization: `Bearer ${token}`,
       },
     });
+    handleResponse(response)
     return response.json();
-  } catch (err) {
-    console.log(err);
-  }
+ 
 };

@@ -1,42 +1,51 @@
 import fetch from "isomorphic-fetch";
 import cookie from "js-cookie";
 import { API } from "../config/config";
-// import Router from "next/router";
+import Router from "next/router";
+
+//check if the JWT-Token is expired ==> redirect them to signIn and clear local storage and cookies
+
+export const handleResponse = (response) => {
+  if (response.status === 401) {
+    removeCookie("token");
+    removeLocalStorage("user");
+    Router.push({
+      pathname: `/signin`,
+      query: {
+        message: "Your session is expired! please Signin.",
+      },
+    });
+  } else {
+    return;
+  }
+};
 
 //Signup Action
 export const signUp = async (userData) => {
-  try {
-    const response = await fetch(`${API}/signup`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "content-Type": "application/json",
-      },
-      body: JSON.stringify(userData),
-    });
-    const data = await response.json();
-    return data;
-  } catch (err) {
-    console.log(`ERROR IN SIGNUP ACTION`, err.response.data.message);
-  }
+  const response = await fetch(`${API}/signup`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "content-Type": "application/json",
+    },
+    body: JSON.stringify(userData),
+  });
+  const data = await response.json();
+  return data;
 };
 
 // Signin Action
 export const signIn = async (userData) => {
-  try {
-    const response = await fetch(`${API}/signin`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "content-Type": "application/json",
-      },
-      body: JSON.stringify(userData),
-    });
-    const data = await response.json();
-    return data;
-  } catch (err) {
-    console.log(`ERROR IN SIGNUP ACTION`, err.response.data.message);
-  }
+  const response = await fetch(`${API}/signin`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "content-Type": "application/json",
+    },
+    body: JSON.stringify(userData),
+  });
+  const data = await response.json();
+  return data;
 };
 
 //Signout Action (in Header Component)
@@ -45,14 +54,11 @@ export const signout = async (next) => {
   removeCookie("token");
   removeLocalStorage("user");
   next();
-  try {
-    const data = await fetch(`${API}/signout`, {
-      method: "GET",
-    });
-    return data;
-  } catch (err) {
-    return err.response.data.message;
-  }
+
+  const data = await fetch(`${API}/signout`, {
+    method: "GET",
+  });
+  return data;
 };
 
 /////////////////////////COOKIES//////////////////

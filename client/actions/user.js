@@ -1,5 +1,6 @@
 import fetch from "isomorphic-fetch";
 import { API } from "../config/config";
+import { handleResponse } from "./auth";
 
 ///////////////// USER PUBLIC PROFILE ///////////
 
@@ -25,7 +26,7 @@ export const userPrivateProfile = async (token) => {
       Authorization: `Bearer ${token}`,
     },
   });
-
+  handleResponse(response);
   const data = await response.json();
   return data;
 };
@@ -41,7 +42,7 @@ export const updateUserProfile = async (formData, token) => {
     },
     body: formData,
   });
-
+handleResponse(response)
   const data = await response.json();
   return data;
 };

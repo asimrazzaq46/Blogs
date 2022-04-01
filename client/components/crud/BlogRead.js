@@ -6,7 +6,7 @@ import { isAuth, getCookie } from "../../actions/auth";
 import { list, updateBlog, deleteBlog } from "../../actions/blog";
 import moment from "moment";
 
-const BlogRead = () => {
+const BlogRead = ({ username }) => {
   const [values, setValues] = useState({
     blogs: [],
     error: "",
@@ -20,7 +20,7 @@ const BlogRead = () => {
 
   //LOADING ALL THE BLOG LIST
   const loadBlogs = async () => {
-    const data = await list();
+    const data = await list(username);
     if (data.error) {
       console.log(`error in blog read component`, data.error);
       setValues({ ...values, error: data.error });
@@ -55,7 +55,7 @@ const BlogRead = () => {
   const showUpdateButton = (blog) => {
     if (isAuth() && isAuth().role === 0) {
       return (
-        <Link href={`/user/crud/blog/${blog.slug}`}>
+        <Link href={`/user/crud/${blog.slug}`}>
           <a className="btn btn-sm btn-warning ml-2">Update</a>
         </Link>
       );
@@ -78,8 +78,11 @@ const BlogRead = () => {
           </a>
         </Link>
         <p className="mark">
-          Written by {blog.postedBy.name} | published on{" "}
-          {moment(blog.updatedAt).fromNow()}
+          Written by{" "}
+          <Link href={`/profile/${blog.postedBy.username}`}>
+            <a className="lead ">{blog.postedBy?.name}</a>
+          </Link>{" "}
+          | published on {moment(blog.updatedAt).fromNow()}
         </p>
         <button
           className="btn btn-sm btn-danger"

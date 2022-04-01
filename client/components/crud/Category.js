@@ -68,7 +68,7 @@ const Category = () => {
   const handleForm = (e) => {
     e.preventDefault();
     setValues({ ...values, error: false, success: false, removed: false });
-    console.table({ name, error, success, removed, categories });
+   
     create({ name }, token).then((data) => {
       if (data.error) {
         setValues({ ...values, error: data.error, success: false });

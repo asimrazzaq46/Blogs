@@ -1,6 +1,7 @@
 const Blog = require("../../models/blog");
 const Category = require("../../models/category");
 const Tags = require("../../models/tags");
+const User = require("../../models/users");
 
 //external libraries
 const formidable = require("formidable");
@@ -273,13 +274,12 @@ exports.relatedBlogs = catchAsynError(async (req, res) => {
     categories: { $in: categories },
   })
     .limit(limit)
-    .populate("postedBy", "_id name profile")
+    .populate("postedBy", "_id name username profile")
     .select("title slug excerpt postedBy createdAt updatedAt");
 
   if (!blogs || blogs.length === 0) {
     res.json({ error: "No related blogs are available!" });
   }
- 
 
   res.json(blogs);
 });
@@ -311,4 +311,28 @@ exports.searchBlog = catchAsynError(async (req, res) => {
     }
     res.status(200).json(blog);
   }
+});
+
+//GET ALL BLOGS CREATED BY LOGGED IN USER
+exports.getAllBlogByUser = catchAsynError(async (req, res) => {
+  const { username } = req.params;
+
+  const user = await User.findOne({ username }).select(
+    "-photo -hashed_password -salt"
+  );
+
+  if (!user) {
+    return res.status(404).json({ error: "User not found!" });
+  }
+  const blog = await Blog.find({ postedBy: user })
+    .populate("categories", "_id name slug")
+    .populate("tags", "_id name slug")
+    .populate("postedBy", "_id name username profile")
+    .select("_id title slug postedBy createdAt updatedAt");
+  if (!blog || !blog.length) {
+    return res
+      .status(200)
+      .json({ user, error: "This user have not created any blogs!" });
+  }
+  res.status(200).json({ user, blog });
 });

@@ -4,7 +4,7 @@ import moment from "moment";
 import { API } from "../../config/config";
 
 const Card = ({ blog }) => {
-  const username = blog.postedBy.profile.split("/").slice(-1).toString();
+  const { username } = blog.postedBy;
 
   const showBlogCategories = (categories) => {
     return (
