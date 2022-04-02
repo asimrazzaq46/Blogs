@@ -6,6 +6,7 @@ import Layout from "../../components/Layout";
 import Link from "next/link";
 import Private from "../../components/auth/Private";
 import { API, Domain, APP_NAME } from "../../config/config";
+import ContactForm from "../../components/contactForm/ContactForm";
 import { userPublicProfile } from "../../actions/user";
 
 const PublicProfile = ({ user, blogs, error, asPath }) => {
@@ -109,7 +110,9 @@ const PublicProfile = ({ user, blogs, error, asPath }) => {
                     Message {user.name}
                   </h5>
                   <br />
-                  <p>contact form</p>
+                  <p>
+                    <ContactForm AuthorEmail={user.email} />
+                  </p>
                 </div>
               </div>
             </div>

@@ -12,6 +12,7 @@ const categoryRoutes = require("./routes/categories/categoriesRoutes");
 const tagsRoutes = require("./routes/tags/tagsRoutes");
 const blogRoutes = require("./routes/blogs/AdminBlogRoutes");
 const UserBlogRoutes = require("./routes/blogs/userBlogRoutes");
+const formRoutes = require("./routes/formRoutes");
 const app = express();
 
 // Setting Up config files
@@ -31,5 +32,6 @@ app.use("/api", categoryRoutes);
 app.use("/api", tagsRoutes);
 app.use("/api", blogRoutes);
 app.use("/api", UserBlogRoutes);
+app.use("/api", formRoutes);
 
 module.exports = app;

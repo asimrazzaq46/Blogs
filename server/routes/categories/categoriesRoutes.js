@@ -20,11 +20,8 @@ const {
 const { requireSignin } = require("../../middlewares/signinRequire");
 const { isAdmin } = require("../../middlewares/isAdmin");
 
-// const isAdmin = require("../../middlewares/isAdmin");
-const check = (_, __, next) => {
-  console.log(`came until here`);
-  next();
-};
+
+
 router.route("/category").post(
   categoryCreateValidator,
   runValidation,
