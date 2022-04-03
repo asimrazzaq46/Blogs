@@ -20,7 +20,8 @@ exports.contactForm = catchAsncError(async (req, res) => {
     <p>This email may contain sensitive information</p>
     `,
   };
-  sendEmail(req, res, msg);
+  sendEmail(msg);
+  res.status(200).json({ success: true });
 });
 
 exports.contactBlogAuthor = catchAsncError(async (req, res) => {
@@ -40,5 +41,6 @@ exports.contactBlogAuthor = catchAsncError(async (req, res) => {
       <p>This email may contain sensitive information</p>
       `,
   };
-  sendEmail(req, res, msg);
+  sendEmail(msg);
+  res.status(200).json({ success: true });
 });

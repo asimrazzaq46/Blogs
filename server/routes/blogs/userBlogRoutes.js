@@ -11,8 +11,11 @@ const {
 
 // Authentication middleware
 const { requireSignin } = require("../../middlewares/signinRequire");
-const { authMiddleware } = require("../../middlewares/isAdmin");
-const { canUpdateAndDelete } = require("../../controllers/authController");
+const {
+  authMiddleware,
+  canUpdateAndDelete,
+} = require("../../middlewares/isAdmin");
+
 //create
 router.route("/user/blog").post(requireSignin, authMiddleware, createBlog);
 

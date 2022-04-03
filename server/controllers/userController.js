@@ -74,7 +74,6 @@ exports.updateProfile = catchAsncError(async (req, res) => {
         }
         user.photo.data = fs.readFileSync(files.photo.filepath);
         user.photo.contentType = files.photo.mimetype;
-        console.log(user.photo.contentType);
       }
       user.save((err, result) => {
         if (err) {

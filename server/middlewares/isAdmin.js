@@ -1,5 +1,5 @@
 const User = require("../models/users");
-
+const catchAsynError = require("../middlewares/catchAsncError");
 // const isAdmin = (req, res, next) => {
 //   //assigned req.profile on signinrequire middleware...if the user is authenticated then req.profile = Loggedin user
 //   if (req.profile.role !== 1) {
@@ -43,3 +43,19 @@ exports.isAdmin = async (req, res, next) => {
   req.profile = user;
   next();
 };
+
+/////////////////// Only Authenticated User Can Update And Delete /////////////////////
+
+exports.canUpdateAndDelete = catchAsynError(async (req, res, next) => {
+  const slug = req.params.slug.toLowerCase();
+  const blog = await Blog.findOne({ slug });
+  const authorizedUser =
+    blog.postedBy._id.toString() === req.profile._id.toString();
+  if (!authorizedUser) {
+    return res
+      .status(400)
+      .json({ error: "Only the user who create this can Delete this blog!" });
+  }
+
+  next();
+});

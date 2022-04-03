@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { signIn, authenticateUSer, isAuth } from "./../../actions/auth";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const SigninComponent = () => {
   //creating values for storing data with useState hook
@@ -80,8 +81,17 @@ const SigninComponent = () => {
               placeholder="Type your password"
             />
           </div>
-          <div className="text-center">
-            <button className="btn btn-primary ">Signin</button>
+          <div>
+            
+            <div className="text-center">
+              <button className="btn btn-primary ml-6">Signin</button>
+              <Link href={`/auth/password/forgot`}>
+              <a className="btn btn-sm btn-outline-danger float-right ">
+                Forgot Password ?
+              </a>
+            </Link>
+            </div>
+            
           </div>
         </form>
       </div>
@@ -97,6 +107,8 @@ const SigninComponent = () => {
       {showError()}
       {showLoading()}
       {signinForm()}
+      <br />
+      <div className="text-center"></div>
     </Fragment>
   );
 };

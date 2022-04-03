@@ -104,7 +104,7 @@ export const removeLocalStorage = (key) => {
   }
 };
 
-/////////////////////AUTHENTICATE USER///////////////
+/////////////////////AUTHENTICATE AND PRESIST USER///////////////
 
 export const authenticateUSer = (data, next) => {
   setCookie("token", data.token);
@@ -112,6 +112,8 @@ export const authenticateUSer = (data, next) => {
 
   next();
 };
+
+/////////////////////// AUTHENTICATING USER /////////////////
 
 export const isAuth = () => {
   if (process.browser) {
@@ -127,6 +129,8 @@ export const isAuth = () => {
   }
 };
 
+/////////////////////// UPDATEING EXSITING USER /////////////////
+
 export const updateUser = (newUserData, next) => {
   if (process.browser) {
     if (localStorage.getItem("user")) {
@@ -136,4 +140,33 @@ export const updateUser = (newUserData, next) => {
       next();
     }
   }
+};
+
+/////////////////////// FORGOT PASSWORD /////////////////
+
+export const forgotPassword = async (email) => {
+  const response = await fetch(`${API}/forgot-password`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "content-Type": "application/json",
+    },
+    body: JSON.stringify(email),
+  });
+  const data = await response.json();
+  return data;
+};
+/////////////////////// RESET PASSWORD /////////////////
+
+export const resetPassword = async (resetInfo) => {
+  const response = await fetch(`${API}/reset-password`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "content-Type": "application/json",
+    },
+    body: JSON.stringify(resetInfo),
+  });
+  const data = await response.json();
+  return data;
 };
