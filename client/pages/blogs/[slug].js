@@ -43,7 +43,7 @@ const singleBlogPage = ({ blog, asPath, router }) => {
   const loadRelated = async () => {
     const data = await listOfRelatedBlogs(blog);
     if (data.error) {
-      console.log(`error in load related in slug page`, data.error);
+      console.log(data.error);
     } else {
       return setRelated(data);
     }

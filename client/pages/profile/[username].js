@@ -10,7 +10,7 @@ import ContactForm from "../../components/contactForm/ContactForm";
 import { userPublicProfile } from "../../actions/user";
 
 const PublicProfile = ({ user, blogs, error, asPath }) => {
-  console.log(user);
+  
   const head = () => {
     return (
       <Head>

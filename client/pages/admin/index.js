@@ -11,32 +11,32 @@ const adminindex = () => {
             <div className="col-md-12 text-center pt-5 pb-5">
               <h2>Admin Dashboard</h2>
             </div>
-            <div className="col-md-4">
-              <ul className="list-group">
-                <li className="list-group-item">
+            <div className="col-md-2"></div>
+            <div className="col-md-8  d-flex justify-content-center " >
+              <ul className="list-group d-flex justify-content-center">
+                <li className="list-group-item list-border d-flex justify-content-center">
                   <Link href="/admin/crud/category-tag">
                     <a>Create Category And Tags</a>
                   </Link>
                 </li>
 
-                <li className="list-group-item">
+                <li className="list-group-item list-border d-flex justify-content-center">
                   <Link href="/admin/crud/blog">
                     <a>Create Blog</a>
                   </Link>
                 </li>
-                <li className="list-group-item">
+                <li className="list-group-item list-border d-flex justify-content-center">
                   <Link href="/admin/crud/blogs">
                     <a>Update/Delete Blog</a>
                   </Link>
                 </li>
-                <li className="list-group-item">
+                <li className="list-group-item list-border d-flex justify-content-center">
                   <Link href="/user/update">
                     <a>Update Profile</a>
                   </Link>
                 </li>
               </ul>
             </div>
-            <div className="col-md-8">right</div>
           </div>
         </div>
       </Admin>

@@ -3,7 +3,7 @@ import Link from "next/link";
 import Router from "next/router";
 
 import { isAuth, getCookie } from "../../actions/auth";
-import { list, updateBlog, deleteBlog } from "../../actions/blog";
+import { list, deleteBlog } from "../../actions/blog";
 import moment from "moment";
 
 const BlogRead = ({ username }) => {
@@ -25,6 +25,7 @@ const BlogRead = ({ username }) => {
       console.log(`error in blog read component`, data.error);
       setValues({ ...values, error: data.error });
     } else {
+      console.log(`blogRead Component`, data);
       setValues({ ...values, error: "", blogs: data.blog });
     }
   };
@@ -40,7 +41,6 @@ const BlogRead = ({ username }) => {
     }
     const data = await deleteBlog(slug, token);
     if (data.error) {
-      console.log(`error in deleting blog read compoent`, data.error);
       setValues({ ...values, error: data.error });
     } else {
       setValues({
@@ -77,13 +77,22 @@ const BlogRead = ({ username }) => {
             <h3>{blog.title}</h3>
           </a>
         </Link>
-        <p className="mark">
-          Written by{" "}
-          <Link href={`/profile/${blog.postedBy.username}`}>
-            <a className="lead ">{blog.postedBy?.name}</a>
-          </Link>{" "}
-          | published on {moment(blog.updatedAt).fromNow()}
-        </p>
+
+        {blog.postedBy? (
+          <p className="mark">
+            Written by{" "}
+            <Link href={`/profile/${blog.postedBy?.username || username}`}>
+              <a className="lead ">{blog.postedBy?.name}</a>
+            </Link>{" "}
+            | published {moment(blog.updatedAt).fromNow()}
+          </p>
+        ) : (
+          <p className="mark">
+            {" "}
+            Written by Unknown | published {moment(blog.updatedAt).fromNow()}
+          </p>
+        )}
+
         <button
           className="btn btn-sm btn-danger"
           onClick={() => removeBlog(blog)}
