@@ -20,6 +20,21 @@ export const handleResponse = (response) => {
   }
 };
 
+// CONFIRM ON SIGNUP
+
+export const preSignUp = async (userData) => {
+  const response = await fetch(`${API}/pre-signup`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "content-Type": "application/json",
+    },
+    body: JSON.stringify(userData),
+  });
+  const data = await response.json();
+  return data;
+};
+
 //Signup Action
 export const signUp = async (userData) => {
   const response = await fetch(`${API}/signup`, {

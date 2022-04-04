@@ -12,53 +12,115 @@ dotenv.config();
 /////////////////// Confirm the user before saving into the database  /////////////////////
 exports.preSignUp = catchAsynError(async (req, res) => {
   const { name, email, password } = req.body;
-  email = email.toLowerCase();
-  const user = await User.findOne({ email });
+
+  const user = await User.findOne({ email: email.toLowerCase() });
   if (user) {
     return res.status(400).json({ error: "This Email has already exist." });
   } else {
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY, {
-      expiresIn: process.env.JWT_CONFIRM_EMAIL_EXPIRE_TIME,
+    const token = jwt.sign(
+      { name, email, password },
+      process.env.JWT_SECRET_KEY,
+      {
+        expiresIn: process.env.JWT_CONFIRM_EMAIL_EXPIRE_TIME,
+      }
+    );
+
+    const msg = {
+      to: email, // Change to your recipient
+      from: process.env.Email_FROM, // Change to your verified sender
+      subject: `Account Acctivation Link.`,
+      html: `
+      <h3>Please click on this following link to activate your account.</h3>
+      <a>${process.env.CLIENT_URL}/auth/account/activate/${token}</a>
+      <p>Sender Email: ${process.env.Email_FROM}</p>
+      <p>alert: if you not asked for the password don't click.</p>
+      <hr/>
+      <p>This email may contain sensitive information</p>
+      `,
+    };
+    sendEmail(msg);
+    res.status(200).json({
+      success: true,
+      message: `Email has been sent to your ${email}.\nclick on the link to activate your account.\nLink expires in 10 minutes`,
     });
   }
 });
 
 /////////////////// Creating new User Route/////////////////////
 
+// exports.signUp = catchAsynError(async (req, res) => {
+//   const { name, email, password, role } = req.body;
+//   //if email is already exist then returning with an error
+//   const userExist = await User.findOne({ email });
+//   if (userExist) {
+//     return res.status(404).json({ error: "Email is already exist" });
+//   }
+
+//   //capitalize the First letter of name
+//   const nameCap = name.split(" ");
+
+//   const newName =
+//     nameCap[0].charAt(0).toUpperCase() +
+//     nameCap[0].slice(1) +
+//     " " +
+//     nameCap[1].charAt(0).toUpperCase() +
+//     nameCap[1].slice(1);
+
+//   // creating unique username everytime and saving them into database for every new users
+//   let username = shortId.generate();
+//   let profile = `${process.env.CLIENT_URL}/profile/${username}`;
+
+//   await User.create({
+//     name: newName,
+//     email,
+//     password,
+//     profile,
+//     username,
+//     role,
+//   });
+//   res.status(201).json({
+//     success: true,
+//     message: "congratulation,User is created successfully.",
+//   });
+// });
+
 exports.signUp = catchAsynError(async (req, res) => {
-  const { name, email, password, role } = req.body;
-  //if email is already exist then returning with an error
-  const userExist = await User.findOne({ email });
-  if (userExist) {
-    return res.status(404).json({ error: "Email is already exist" });
+  const { token } = req.body;
+  if (token) {
+    jwt.verify(
+      token,
+      process.env.JWT_SECRET_KEY,
+      async function (err, decoded) {
+        if (err) {
+          return res
+            .status(400)
+            .json({ error: "Your Link is expired! please try again." });
+        } else {
+          const { name, email, password } = jwt.decode(token);
+          const nameCap = name.split(" ");
+          const newName =
+            nameCap[0].charAt(0).toUpperCase() +
+            nameCap[0].slice(1) +
+            " " +
+            nameCap[1].charAt(0).toUpperCase() +
+            nameCap[1].slice(1);
+          let username = shortId.generate();
+          let profile = `${process.env.CLIENT_URL}/profile/${username}`;
+          await User.create({
+            name: newName,
+            email,
+            password,
+            profile,
+            username,
+          });
+          res.status(201).json({
+            success: true,
+            message: "congratulation,User is created successfully. please signin.",
+          });
+        }
+      }
+    );
   }
-
-  //capitalize the First letter of name
-  const nameCap = name.split(" ");
-
-  const newName =
-    nameCap[0].charAt(0).toUpperCase() +
-    nameCap[0].slice(1) +
-    " " +
-    nameCap[1].charAt(0).toUpperCase() +
-    nameCap[1].slice(1);
-
-  // creating unique username everytime and saving them into database for every new users
-  let username = shortId.generate();
-  let profile = `${process.env.CLIENT_URL}/profile/${username}`;
-
-  await User.create({
-    name: newName,
-    email,
-    password,
-    profile,
-    username,
-    role,
-  });
-  res.status(201).json({
-    success: true,
-    message: "congratulation,User is created successfully.",
-  });
 });
 
 /////////////////// SignIn User Route/////////////////////

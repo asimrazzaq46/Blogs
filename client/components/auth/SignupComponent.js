@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { signUp, isAuth } from "./../../actions/auth";
+import { signUp, isAuth,preSignUp } from "./../../actions/auth";
 import Router from "next/router";
 
 const SignupComponent = () => {
@@ -34,7 +34,7 @@ const SignupComponent = () => {
     const user = { name, email, password };
 
     //sending data in actions signup
-    signUp(user).then((data) => {
+    preSignUp(user).then((data) => {
       if (data.error) {
         setvalues({ ...values, loading: false, error: data.error });
       } else {

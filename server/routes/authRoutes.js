@@ -28,7 +28,7 @@ const { isAdmin } = require("../middlewares/isAdmin");
 // const isAdmin = require("../middlewares/isAdmin");
 
 router.route("/pre-signup").post(userSignupValidator, runValidation, preSignUp);
-router.route("/signup").post(userSignupValidator, runValidation, signUp);
+router.route("/signup").post(signUp);
 router.route("/signin").post(userSigninValidator, runValidation, signIn);
 router.route("/signout").get(signOut);
 router

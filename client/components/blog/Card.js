@@ -4,7 +4,7 @@ import moment from "moment";
 import { API } from "../../config/config";
 
 const Card = ({ blog }) => {
-  const { username } = blog.postedBy;
+  const username = blog.postedBy?.username;
 
   const showBlogCategories = (categories) => {
     return (
@@ -40,13 +40,20 @@ const Card = ({ blog }) => {
         </Link>
       </header>
       <section>
-        <p className="mark ml-1 pt-2 pb-2">
-          Written by{" "}
-          <Link href={`/profile/${username}`}>
-            <a className="lead ">{blog.postedBy?.name}</a>
-          </Link>{" "}
-          | published {moment(blog.updatedAt).fromNow()}
-        </p>
+        {username ? (
+          <p className="mark ml-1 pt-2 pb-2">
+            Written by{" "}
+            <Link href={`/profile/${username}`}>
+              <a className="lead ">{blog.postedBy?.name}</a>
+            </Link>{" "}
+            | published {moment(blog.updatedAt).fromNow()}
+          </p>
+        ) : (
+          <p className="mark ml-1 pt-2 pb-2">
+            {" "}
+            Written by Unknown | published Unknow
+          </p>
+        )}
       </section>
       <section>
         {showBlogCategories(blog.categories)}

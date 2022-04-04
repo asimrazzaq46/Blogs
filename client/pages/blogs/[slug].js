@@ -11,7 +11,7 @@ import { singleBlog, listOfRelatedBlogs } from "../../actions/blog";
 import { API, Domain, APP_NAME } from "../../config/config";
 
 const singleBlogPage = ({ blog, asPath, router }) => {
-  const { username } = blog.postedBy;
+  const username = blog.postedBy?.username;
 
   const [related, setRelated] = useState([]);
 
@@ -119,14 +119,22 @@ const singleBlogPage = ({ blog, asPath, router }) => {
                   <h1 className="display-2 pb-3 text-center font-weight-bold">
                     {blog.title}
                   </h1>
-                  <p className="mark mt-3">
-                    {" "}
-                    Written by{" "}
-                    <Link href={`/profile/${username}`}>
-                      <a className="lead ">{blog.postedBy?.name}</a>
-                    </Link>{" "}
-                    | published {moment(blog.updatedAt).fromNow()}
-                  </p>
+
+                  {username ? (
+                    <p className="mark mt-3">
+                      {" "}
+                      Written by{" "}
+                      <Link href={`/profile/${username}`}>
+                        <a className="lead ">{blog.postedBy?.name}</a>
+                      </Link>{" "}
+                      | published {moment(blog.updatedAt).fromNow()}
+                    </p>
+                  ) : (
+                    <p className="mark mt-3">
+                      {" "}
+                      Written by Unknown | published Unknow
+                    </p>
+                  )}
                   <div className="pb-3">
                     {showAllCategories()}
                     {showAllTags()}
