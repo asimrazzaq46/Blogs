@@ -1,13 +1,14 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { signIn, authenticateUSer, isAuth } from "./../../actions/auth";
+import GoogleAuth from "./GoogleAuth";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
 const SigninComponent = () => {
   //creating values for storing data with useState hook
   const [values, setValues] = useState({
-    email: "asim1@hotmail.com",
-    password: "asim123",
+    email: "",
+    password: "",
     error: "",
     loading: false,
   });
@@ -70,6 +71,8 @@ const SigninComponent = () => {
               className="form-control"
               onChange={handleChange("email")}
               placeholder="Type your email"
+              autoComplete="on"
+            
             />
           </div>
           <div className="form-group">
@@ -82,16 +85,17 @@ const SigninComponent = () => {
             />
           </div>
           <div>
-            
-            <div className="text-center">
-              <button className="btn btn-primary ml-6">Signin</button>
-              <Link href={`/auth/password/forgot`}>
-              <a className="btn btn-sm btn-outline-danger float-right ">
-                Forgot Password ?
-              </a>
-            </Link>
+            <div className="d-flex justify-content-center mr-4">
+              <GoogleAuth />
+              <button className="btn btn-primary ml-3">Signin</button>
             </div>
-            
+            <div className="text-center">
+              <Link href={`/auth/password/forgot`}>
+                <a className="btn btn-sm btn-outline-danger mt-3 ">
+                  Forgot Password ?
+                </a>
+              </Link>
+            </div>
           </div>
         </form>
       </div>
@@ -107,6 +111,7 @@ const SigninComponent = () => {
       {showError()}
       {showLoading()}
       {signinForm()}
+
       <br />
       <div className="text-center"></div>
     </Fragment>

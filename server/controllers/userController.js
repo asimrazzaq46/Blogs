@@ -99,7 +99,7 @@ exports.profilePhoto = catchAsncError(async (req, res) => {
   if (!user) {
     return res.status(404).json({ error: "user is not found!" });
   }
-  console.log(user.photo.contentType);
+
   res
     .status(200)
     .set("Content-Type", user.photo.contentType)

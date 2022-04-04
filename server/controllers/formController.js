@@ -5,7 +5,7 @@ const catchAsncError = require("../middlewares/catchAsncError");
 
 exports.contactForm = catchAsncError(async (req, res) => {
   const { name, email, message } = req.body;
-  console.log(`${process.env.Email_TO}`);
+ 
   const msg = {
     to: process.env.Email_TO, // Change to your recipient
     from: process.env.Email_FROM, // Change to your verified sender
@@ -26,7 +26,7 @@ exports.contactForm = catchAsncError(async (req, res) => {
 
 exports.contactBlogAuthor = catchAsncError(async (req, res) => {
   const { AuthorEmail, name, email, message } = req.body;
-  console.log(`${process.env.Email_TO}`);
+
   const msg = {
     to: AuthorEmail, // Change to your recipient
     from: process.env.Email_FROM, // Change to your verified sender

@@ -7,6 +7,7 @@ const sendEmail = require("../utils/sendEmail");
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
 const _ = require("lodash");
+const { OAuth2Client } = require("google-auth-library");
 dotenv.config();
 
 /////////////////// Confirm the user before saving into the database  /////////////////////
@@ -33,7 +34,6 @@ exports.preSignUp = catchAsynError(async (req, res) => {
       <h3>Please click on this following link to activate your account.</h3>
       <a>${process.env.CLIENT_URL}/auth/account/activate/${token}</a>
       <p>Sender Email: ${process.env.Email_FROM}</p>
-      <p>alert: if you not asked for the password don't click.</p>
       <hr/>
       <p>This email may contain sensitive information</p>
       `,
@@ -115,7 +115,8 @@ exports.signUp = catchAsynError(async (req, res) => {
           });
           res.status(201).json({
             success: true,
-            message: "congratulation,User is created successfully. please signin.",
+            message:
+              "congratulation,User is created successfully. please signin.",
           });
         }
       }
@@ -198,7 +199,7 @@ exports.forgotPassword = catchAsynError(async (req, res) => {
     <h3>Please click on this following link to reset your password.</h3>
     <a>${process.env.CLIENT_URL}/auth/password/reset/${token}</a>
     <p>Sender Email: ${process.env.Email_FROM}</p>
-    <p>alert: if you not asked for the password don't click.</p>
+    <p>Warning: if you not asked for the password then ignore.</p>
     <hr/>
     <p>This email may contain sensitive information</p>
     `,
@@ -268,5 +269,114 @@ exports.resetPassword = catchAsynError(async (req, res) => {
         }
       }
     );
+  }
+});
+
+///////////////////////// GOOGLE LOGIN (O'Auth) ///////////////////////
+
+const client = new OAuth2Client(process.env.OAUTH_CLIENT_ID);
+exports.googleSignin = catchAsynError(async (req, res) => {
+  // On google login we pass the idTOken to the backend from frontend
+
+  const idToken = req.body.tokenId;
+
+  //then with verifyIdToken function we are going to verify if the token is valid or not
+
+  const response = await client.verifyIdToken({
+    idToken,
+    audience: process.env.OAUTH_CLIENT_ID,
+  });
+
+  //  if it0s valid then destructrue the properties we need from the payload
+
+  const { email_verified, name, email, jti } = response.payload;
+
+  //then checking the email is verified or not ===> response will be true or false
+
+  if (email_verified) {
+    // if email is verified then check do we have this user already in our database?
+
+    const user = await User.findOne({ email });
+
+    if (user) {
+      //if we do then destructure the properties we need to send back to the frontend
+
+      const { _id, email, name, role, username } = user;
+
+      // Generate the JWT token on login
+
+      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY, {
+        expiresIn: process.env.JWT_EXPIRE_TIME,
+      });
+
+      const options = {
+        expires: new Date(
+          Date.now() + process.env.COOKIE_EXPIRE_TIME * 24 * 60 * 60 * 1000
+        ),
+        httpOnly: true,
+        secure: false,
+      };
+      // and set the token in cookies and then send the token and user back as a json payload
+
+      res
+        .status(200)
+        .cookie("token", token, options)
+        .json({ token, user: { _id, email, name, role, username } });
+    } else {
+      //in case if it's first time and the user is not saved in our database then create the user in database
+
+      //Capitalize the first letter of name
+      const nameCap = name.split(" ");
+      const newName =
+        nameCap[0].charAt(0).toUpperCase() +
+        nameCap[0].slice(1) +
+        " " +
+        nameCap[1].charAt(0).toUpperCase() +
+        nameCap[1].slice(1);
+      //create username and profile
+      let username = shortId.generate();
+      let profile = `${process.env.CLIENT_URL}/profile/${username}`;
+      let password = jti;
+      const user = await User.create({
+        name: newName,
+        email,
+        password,
+        profile,
+        username,
+      });
+
+      await user.save((err, data) => {
+        if (err) {
+          return res
+            .status(400)
+            .json({ error: "something went wrong! please try again." });
+        } else {
+          const { _id, email, name, role, username } = data;
+          // Generate the JWT token on login
+          const token = jwt.sign(
+            { _id: user._id },
+            process.env.JWT_SECRET_KEY,
+            {
+              expiresIn: process.env.JWT_EXPIRE_TIME,
+            }
+          );
+
+          const options = {
+            expires: new Date(
+              Date.now() + process.env.COOKIE_EXPIRE_TIME * 24 * 60 * 60 * 1000
+            ),
+            httpOnly: true,
+            secure: false,
+          };
+          // and set the token in cookies and then send the token and user back as a json payload
+          return res
+            .status(200)
+            .cookie("token", token, options)
+            .json({ token, user: { _id, email, name, role, username } });
+        }
+      });
+    }
+  } else {
+    return res.status(404).json({ error: "Google login failed." });
   }
 });

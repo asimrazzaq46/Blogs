@@ -63,6 +63,21 @@ export const signIn = async (userData) => {
   return data;
 };
 
+// Signin Action
+export const googleSignIn = async (userData) => {
+  const response = await fetch(`${API}/google-login`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "content-Type": "application/json",
+    },
+    body: JSON.stringify(userData),
+  });
+  const data = await response.json();
+  return data;
+};
+
+
 //Signout Action (in Header Component)
 
 export const signout = async (next) => {

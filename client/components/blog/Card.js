@@ -51,7 +51,7 @@ const Card = ({ blog }) => {
         ) : (
           <p className="mark ml-1 pt-2 pb-2">
             {" "}
-            Written by Unknown | published Unknow
+            Written by Unknown | published {moment(blog.updatedAt).fromNow()}
           </p>
         )}
       </section>

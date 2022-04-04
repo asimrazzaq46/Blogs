@@ -6,6 +6,7 @@ const {
   preSignUp,
   signUp,
   signIn,
+  googleSignin,
   signOut,
   forgotPassword,
   resetPassword,
@@ -30,6 +31,7 @@ const { isAdmin } = require("../middlewares/isAdmin");
 router.route("/pre-signup").post(userSignupValidator, runValidation, preSignUp);
 router.route("/signup").post(signUp);
 router.route("/signin").post(userSigninValidator, runValidation, signIn);
+router.route("/google-login").post(googleSignin);
 router.route("/signout").get(signOut);
 router
   .route("/forgot-password")

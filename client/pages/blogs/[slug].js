@@ -132,7 +132,8 @@ const singleBlogPage = ({ blog, asPath, router }) => {
                   ) : (
                     <p className="mark mt-3">
                       {" "}
-                      Written by Unknown | published Unknow
+                      Written by Unknown | published{" "}
+                      {moment(blog.updatedAt).fromNow()}
                     </p>
                   )}
                   <div className="pb-3">
